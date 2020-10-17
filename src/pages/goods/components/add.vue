@@ -283,7 +283,7 @@ export default {
     //获取菜单详情 （1条）
     look(id) {
       //发请求
-      reqGoodsDetail({ id: id }).then((res) => {
+      reqGoodsDetail(id).then((res) => {
         if (res.data.code == 200) {
           //这个时候form是没有id的
           this.form = res.data.list;

@@ -19,7 +19,29 @@
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="2">
+
+        <!-- 动态侧边栏 -->
+
+        <div v-for="item in userInfo.menus" :key="item.id">
+          <!-- 有目录的 -->          
+        <el-submenu :index="item.id+''" v-if="item.children">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span>{{item.title}}</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item v-for="i in item.children" :key="i.id" :index="i.url">{{i.title}}</el-menu-item>
+
+          </el-menu-item-group>
+        </el-submenu>
+
+        <!-- 没有目录的 -->
+        <el-menu-item v-else  :index="item.url">{{item.title}}</el-menu-item>
+
+        </div>
+
+
+        <!-- <el-submenu index="2">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>系统设置</span>
@@ -43,11 +65,14 @@
             <el-menu-item index="/banner">轮播图管理</el-menu-item>
             <el-menu-item index="/seckill">秒杀活动</el-menu-item>
           </el-menu-item-group>
-        </el-submenu>
+        </el-submenu> -->
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header">Header</el-header>
+      <el-header class="header">
+        <span>{{userInfo.username}}</span>
+        <el-button type="danger" @click="logOut">退出</el-button>
+      </el-header>
       <el-main class="main">
         <!-- 面包屑 -->
         <el-breadcrumb v-if="$route.name" separator-class="el-icon-arrow-right">
@@ -69,10 +94,18 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters({}),
+    ...mapGetters({
+      userInfo:"userInfo"
+    }),
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      changeUIAction:"changeUIAction"
+    }),
+    logOut(){
+      this.changeUIAction({});
+      this.$router.push("/login")
+    }
   },
   mounted() {},
 };
@@ -86,6 +119,7 @@ export default {
 }
 .header {
   background: #b3c0d1;
+  text-align: right;
 }
 .con{
   padding-top: 20px;

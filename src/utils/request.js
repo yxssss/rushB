@@ -368,10 +368,22 @@ export const reqGoodsDetail = (id) => {
 
 //修改
 export const reqGoodsUpdate = (params) => {
+    let data = new FormData()
+    for (let i in params) {
+        data.append(i, params[i])
+    }
     return axios({
         url: baseUrl + "/api/goodsedit",
         method: "post",
-        data: qs.stringify(params)
+        data
+    })
+}
+
+export const reqLogin=(params)=>{
+    return axios({
+        url:baseUrl+"/api/userlogin",
+        method:"post",
+        data:qs.stringify(params)
     })
 }
 
@@ -440,5 +452,56 @@ export const reqBannerDel = (id) => {
         url: baseUrl + "/api/bannerdelete",
         method: "post",
         data: qs.stringify({ id: id })
+    })
+}
+
+
+
+
+// +++++++++++++++秒杀管理++++++++++++++++++
+
+//添加
+export const reqSeckAdd = (params) => {
+    return axios({
+        url: baseUrl + "/api/seckadd",
+        method: "post",
+        data: qs.stringify(params)
+    })
+}
+
+
+//列表
+export const reqSeckList = () => {
+    return axios({
+        url: baseUrl + "/api/secklist",
+        method: "get",
+    })
+}
+//删除
+export const reqSeckDel = (id) => {
+    return axios({
+        url: baseUrl + "/api/seckdelete",
+        method: "post",
+        data: qs.stringify({ id: id })
+    })
+}
+
+//1条
+export const reqSeckDetail = (id) => {
+    return axios({
+        url: baseUrl + "/api/seckinfo",
+        method: "get",
+        params: {
+            id: id
+        }
+    })
+}
+
+//修改
+export const reqSeckUpdate = (params) => {
+    return axios({
+        url: baseUrl + "/api/seckedit",
+        method: "post",
+        data: qs.stringify(params)
     })
 }

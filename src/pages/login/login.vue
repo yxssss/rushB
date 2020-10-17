@@ -3,10 +3,10 @@
       <div class="box">
         <h3 class="center">登录</h3>
         <div class="line">
-          <el-input placeholder="情输入账号" clearable></el-input>
+          <el-input v-model="form.username" placeholder="情输入账号" clearable></el-input>
         </div>
         <div class="line">
-          <el-input placeholder="情输入密码" clearable show-password></el-input>
+          <el-input v-model="form.password" placeholder="情输入密码" clearable show-password></el-input>
         </div>
         <div class="center line">
           <el-button type="primary" @click="login">登录</el-button>
@@ -15,21 +15,39 @@
   </div>
 </template>
 <script>
+import{reqLogin}from '../../utils/request'
 import { mapGetters, mapActions } from "vuex";
+import {successAlert,warningAlert} from "../../utils/alert"
 export default {
   props: [],
   components: {},
   data() {
-    return {};
+    return {
+      form:{
+        username:"",
+        password:""
+      }
+    };
   },
   computed: {
     ...mapGetters({}),
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      changeUIAction:"changeUIAction"
+    }),
     //登录
     login(){
-      this.$router.push("/")
+      reqLogin(this.form).then(res=>{
+        if(res.data.code==200){
+          successAlert(res.data.msg)
+          this.changeUIAction(res.data.list)
+          // console.log(11,res.data.list);
+          this.$router.push("/")
+        }else{
+          warningAlert(res.data.msg)
+        }
+      })
     }
   },
   mounted() {},
